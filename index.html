@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <title>Restaurant</title>
+    <style>
+        .orderItem {
+            margin-bottom: 20px;
+            margin-left: 30px;
+            display: inline-block;
+        }
+
+        .food-card {
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        .food-list {
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background-color: beige;">
+    <div class="card text-center">
+        <div class="card-body" style="background-color: #fdfd96;">
+            <h1 class="card-title" style="font-size: 35px;">Welcome To Yanyan's Restaurant! Here are the list of foods to pick!</h1>
+            <p class="card-text" style="font-size: 20px;">Prices are shown below, Please click the "Finalize Order" button once you're done picking</p>
+        </div>
+    </div>
+
+    <!--Menu-->   
+    <div class="food-list">
+        <div class="card food-card">
+            <div class="card-body" style="background-color: skyblue">
+                <h5 class="card-title">Steak</h5>
+                <p class="card-text">Price: $30</p>
+            </div>
+        </div>
+        <div class="card food-card">
+            <div class="card-body" style="background-color: pink">
+                <h5 class="card-title">Shawarma</h5>
+                <p class="card-text">Price: $40</p>
+            </div>
+        </div>
+        <div class="card food-card">
+            <div class="card-body" style="background-color: #E6E6FA">
+                <h5 class="card-title">Pepsi</h5>
+                <p class="card-text">Price: $3</p>
+            </div>
+        </div>
+        <div class="card food-card">
+            <div class="card-body" style="background-color: palegreen">
+                <h5 class="card-title">Rice</h5>
+                <p class="card-text">Price: $10</p>
+            </div>
+        </div>
+        <div class="card food-card">
+            <div class="card-body" style="background-color: lightyellow">
+                <h5 class="card-title">Fried rice</h5>
+                <p class="card-text">Price: $15</p>
+            </div>
+        </div>
+    </div>
+
+    <button id="addFoodButton" style="font-size: 20px; padding: 20px; margin-left: 20px;">
+        ADD FOOD ITEM
+    </button>
+    <!--End of menu-->       
+    <h1 style="font-size: 35px;"> Order List:</h1>
+    <!--Choosing Order and quantity-->   
+    <div id="orderItems">
+        <div class="orderItem" style="margin-left: 0px;">
+            <label for="Food" style="font-size: 20px;margin-left: 20px;">Choose your Food:</label> 
+            <select name="Food" class="food" style="font-size: 20px; padding: 10px; margin-left: 10px"> 
+                <option value="Steak">Steak</option> 
+                <option value="Shawarma">Shawarma</option> 
+                <option value="Pepsi">Pepsi</option> 
+                <option value="Friedrice">Fried rice</option>
+                <option value="Rice">Rice</option> 
+            </select>
+            <br><br>
+            <label for="Quantity" style="font-size: 20px;margin-left: 20px;">Quantity:</label>
+            <!-- Set default value to 1 -->
+            <input type="number" class="quantity" name="Quantity" min="1" max="100" value="1" style="font-size: large;"/>
+            <br>
+        </div>
+    </div>
+    <!--End of choosing Order and quantity-->   
+    <br><br>
+    <button id="FinalOrder" style="font-size: 20px; padding: 20px;margin-left: 20px;">
+        Finalize Order
+    </button>
+    <br>
+    <br><br>
+    <label for="Cash" style="font-size: 20px;margin-left: 20px;">Cash:</label>
+    <input type="number" id="Cash" name="Cash" min="1" max="1000" style="font-size: large;"/>
+    <button id="Pay" style="font-size: 10px; padding: 10px;margin-left: 10px;">
+        Pay!
+    </button>
+    <br><br>
+    <!--Scripts-->
+    <script>
+        document.getElementById("addFoodButton").addEventListener("click", addFoodItem);
+
+        function addFoodItem() {
+            const orderItems = document.getElementById("orderItems");
+            const newOrderItem = document.createElement("div");
+            newOrderItem.classList.add("orderItem");
+
+            newOrderItem.innerHTML = `
+                <label for="Food" style="font-size: 20px;">Choose your Food:</label> 
+                <select name="Food" class="food" style="font-size: 20px; padding: 10px;"> 
+                    <option value="Steak">Steak</option> 
+                    <option value="Shawarma">Shawarma</option> 
+                    <option value="Pepsi">Pepsi</option> 
+                    <option value="Friedrice">Fried rice</option>
+                    <option value="Rice">Rice</option> 
+                </select>
+                <br><br>
+                <label for="Quantity" style="font-size: 20px;">Quantity:</label>
+                <input type="number" class="quantity" name="Quantity" min="1" max="100" value="1" style="font-size: large;"/>
+                <br>
+            `;
+
+            orderItems.appendChild(newOrderItem);
+        }
+
+        const Finalbutton = document.querySelector('#FinalOrder');
+        Finalbutton.addEventListener("click", Final);
+
+        function Final(){
+            const foodSelects = document.querySelectorAll('.food');
+            const quantityInputs = document.querySelectorAll('.quantity');
+            let total = 0;
+
+            // Calculate total price based on selected food and quantity for each order item
+            foodSelects.forEach((foodSelect, index) => {
+                const selectedFood = foodSelect.value;
+                const quantity = parseInt(quantityInputs[index].value);
+
+                switch(selectedFood) {
+                    case "Steak":
+                        total += quantity * 30;
+                        break;
+                    case "Shawarma":
+                        total += quantity * 40;
+                        break;
+                    case "Pepsi":
+                        total += quantity * 3;
+                        break;
+                    case "Rice":
+                        total += quantity * 10;
+                        break;
+                    case "Friedrice":
+                        total += quantity * 15;
+                        break;
+                    default:
+                        total += 0;
+                }
+            });
+
+            alert("Order is set! The total is $" + total + ". Please pay up!");
+        }
+
+        document.getElementById("Pay").addEventListener("click", pay);
+
+        function pay() {
+            const foodSelects = document.querySelectorAll('.food');
+            const quantityInputs = document.querySelectorAll('.quantity');
+            let total = 0;
+
+            // Calculate total price based on selected food and quantity for each order item
+            foodSelects.forEach((foodSelect, index) => {
+                const selectedFood = foodSelect.value;
+                const quantity = parseInt(quantityInputs[index].value);
+
+                switch(selectedFood) {
+                    case "Steak":
+                        total += quantity * 30;
+                        break;
+                    case "Shawarma":
+                        total += quantity * 40;
+                        break;
+                    case "Pepsi":
+                        total += quantity * 3;
+                        break;
+                    case "Rice":
+                        total += quantity * 10;
+                        break;
+                    case "Friedrice":
+                        total += quantity * 15;
+                        break;
+                    default:
+                        total += 0;
+                }
+            });
+
+            const cash = parseInt(document.getElementById("Cash").value);
+            if (cash >= total) {
+                const change = cash - total;
+                alert("Your change is $" + change + ". Thank you for your purchase!");
+            } else {
+                alert("Insufficient cash! Please enter a valid amount.");
+            }
+        }
+    </script>
+</body>
+</html>
